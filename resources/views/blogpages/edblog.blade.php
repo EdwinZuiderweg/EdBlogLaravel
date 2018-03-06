@@ -22,7 +22,24 @@
            //alert(xhttp.responseText);
            artikeldiv.innerHTML = xhttp.responseText;
        }
+     }
 
+     //******************************************************************************************
+     function Plaatscomment(artnr) {
+       var txtcomment = "artcommentform" + artnr;
+       var Inhoud = document.getElementById(txtcomment);
+
+       alert("test");
+       //if (Inhoud.value != "") {
+       //   var xhttp = new XMLHttpRequest();
+       // var myURL = "plaatsreactie.php?reactie=";
+       //   myURL += Inhoud.value + "&artnr=" + artnr;
+       //   xhttp.open("POST", myURL, false);
+       //   xhttp.send();
+       //   //alert(xhttp.responseText);
+       //   Inhoud.value = "";
+       // }
+       //Selectartcat(ActCatnr);
      }
   </script>
 
@@ -51,14 +68,29 @@
           @endif
         @endforeach
         <br>{{ $article-> Artikelinhoud }} <br>
-        </div>
         @if ($article-> allowreacties == true)
+          <?php $reactionnr = 0 ?>
           @foreach ($reactions as $reaction)
-            @if ($article-> Artnr == $reaction-> reactienr)
-              <font size = "2"><i>{{$reaction-> reactie}} </i></font> ,
+            @if ($article-> Artnr == $reaction-> artikelid)
+                @if ($reactionnr == 0)
+                  <div id = "divcomment" class = "clscomment">
+                  <br><hr><b>Reacties:</b>
+                  <br><ul>
+                   <?php $reactionnr++ ?>
+                @endif
+                <li><i>Anoniem: {{$reaction-> reactie}} </i></li>
             @endif
           @endforeach
+          @if ($reactionnr > 0)
+            </ul></div>
+          @endif
+          <div id = "divcommentform" class = "clscommentform">
+          <hr><textarea id = artcommentform"></textarea>
+          <input type = "submit" name = "Plaatscomment" value = "geef reactie"
+            onClick= "Plaatscomment({{$article-> Artnr}})">
+          </div>
         @endif
+        </div>
       @endforeach
       </center>
      </div>
