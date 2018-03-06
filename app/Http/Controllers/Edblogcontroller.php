@@ -6,22 +6,27 @@ use App\Http\Controllers\Controller;
 use App\Article;
 use App\Category;
 use App\ArtCats;
+use App\Reaction;
 
 class Edblogcontroller extends Controller
 {
     public function getArticles() {
       //$articles = array("artikel1","artikel2","artikel3","artikel4");
-     $articles = Article::orderBy('Datum', 'DESC')->get(); //Article::all();
-     //$categories = Category::all();
-     $artcategories =  Category::select('*')
-      ->join('ArtCats', 'ArtCats.catnr', '=', 'categorieen.catid')
-      //->where('countries.country_name', $country)
-      ->get();
-     $categories = Category::all();
+      $articles = Article::orderBy('Datum', 'DESC')->get(); //Article::all();
+      //$categories = Category::all();
+      $artcategories =  Category::select('*')
+       ->join('ArtCats', 'ArtCats.catnr', '=', 'categorieen.catid')
+       //->where('countries.country_name', $country)
+       ->get();
+
+      $reactions =  Reaction::all();
+      $categories = Category::all();
       //return $articles;
       return view('blogpages.edblog')-> with("articles", $articles)
                                      -> with("artcategories", $artcategories)
-                                     -> with("categories", $categories);
+                                     -> with("categories", $categories)
+                                     -> with("reactions", $reactions);
+
     }
 
 
@@ -35,10 +40,14 @@ class Edblogcontroller extends Controller
         $artcategories =  Category::select('*')
          ->join('ArtCats', 'ArtCats.catnr', '=', 'categorieen.catid')
          ->get();
+
+        $reactions =  Reaction::all();
         $categories = Category::all();
+
         return view('blogpages.blogarticles',compact('articles'))
                         -> with("artcategories", $artcategories)
-                        -> with("categories", $categories);
+                        -> with("categories", $categories)
+                        -> with("reactions", $reactions);
 
     }
 }

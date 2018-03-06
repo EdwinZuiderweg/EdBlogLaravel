@@ -52,8 +52,15 @@
         @endforeach
         <br>{{ $article-> Artikelinhoud }} <br>
         </div>
-       @endforeach
-       </center>
+        @if ($article-> allowreacties == true)
+          @foreach ($reactions as $reaction)
+            @if ($article-> Artnr == $reaction-> reactienr)
+              <font size = "2"><i>{{$reaction-> reactie}} </i></font> ,
+            @endif
+          @endforeach
+        @endif
+      @endforeach
+      </center>
      </div>
 
    </div>
