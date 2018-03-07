@@ -10,6 +10,8 @@
   <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
   <link rel = "stylesheet" href= "<?php echo asset('css/blog.css') ?>" type="text/css">
   <script>
+     var ActCatnr = "allecats";
+
      function Selectartcat(catnr) {
        if (catnr!= "") {
            ActCatnr = catnr;
@@ -29,17 +31,17 @@
        var txtcomment = "artcommentform" + artnr;
        var Inhoud = document.getElementById(txtcomment);
 
-       alert("test");
-       //if (Inhoud.value != "") {
-       //   var xhttp = new XMLHttpRequest();
-       // var myURL = "plaatsreactie.php?reactie=";
-       //   myURL += Inhoud.value + "&artnr=" + artnr;
-       //   xhttp.open("POST", myURL, false);
-       //   xhttp.send();
-       //   //alert(xhttp.responseText);
-       //   Inhoud.value = "";
-       // }
-       //Selectartcat(ActCatnr);
+       alert(artnr + "," + Inhoud.value);
+       if (Inhoud.value != "") {
+           var xhttp = new XMLHttpRequest();
+           var myURL = "edblog/post/?artnr" + artnr + "&reaction=" + Inhoud.value;
+           alert(myURL);
+           xhttp.open("POST", myURL, false);
+           xhttp.send();
+           alert(xhttp.responseText);
+           Inhoud.value = "";
+       }
+       Selectartcat(ActCatnr);
      }
   </script>
 
@@ -73,7 +75,7 @@
           @foreach ($reactions as $reaction)
             @if ($article-> Artnr == $reaction-> artikelid)
                 @if ($reactionnr == 0)
-                  <div id = "divcomment" class = "clscomment">
+                  <div id = "divcomment"  class = "clscomment">
                   <br><hr><b>Reacties:</b>
                   <br><ul>
                    <?php $reactionnr++ ?>
@@ -85,7 +87,7 @@
             </ul></div>
           @endif
           <div id = "divcommentform" class = "clscommentform">
-          <hr><textarea id = artcommentform"></textarea>
+          <hr><textarea id = "artcommentform{{$article-> Artnr}}"></textarea>
           <input type = "submit" name = "Plaatscomment" value = "geef reactie"
             onClick= "Plaatscomment({{$article-> Artnr}})">
           </div>

@@ -50,4 +50,13 @@ class Edblogcontroller extends Controller
                         -> with("reactions", $reactions);
 
     }
+
+    //***********************************************************************************
+    public function postReaction($artikelid, $reaction) {
+      DB::table('reacties')->insert(
+        ['artikelid' => $artikelid, 'reactie' => $reaction]
+      );
+
+      return view('blogpages.reactionpostresponse');
+    }
 }
