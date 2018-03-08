@@ -2,7 +2,9 @@
 
 Route::get('edblog','Edblogcontroller@getArticles');
 Route::get('edblog/filter/{catid}','Edblogcontroller@getCatArticles');
-Route::post('edblog/post/{Artnr}{Reaction}','Edblogcontroller@postReaction');
+Route::get('edblog/alles/','Edblogcontroller@getAllArticles');
+Route::get('edblog/zoek/{zoekfilter}','Edblogcontroller@getZoekArticles');
+Route::post('edblog/posts/','Edblogcontroller@storereaction');
 
 
 

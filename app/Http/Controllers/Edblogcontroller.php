@@ -48,15 +48,61 @@ class Edblogcontroller extends Controller
                         -> with("artcategories", $artcategories)
                         -> with("categories", $categories)
                         -> with("reactions", $reactions);
+    }
+
+    //***********************************************************************************
+    public function getZoekArticles($zoekfilter) {
+       //$articles = Article::select('*')
+        //->join('ArtCats', 'Artikelen.Artnr', '=', 'ArtCats.artikelnr')
+        //->where('ArtCats.catnr', $catid)
+      //  ->get();
+
+        $articles = Article::orderBy('Datum', 'DESC')
+        ->where('Artikelen.Artikelinhoud','LIKE', '%'.$zoekfilter.'%' )
+        ->orwhere('Artikelen.Artikelnaam','LIKE', '%'.$zoekfilter.'%')
+        ->get(); //Article::all();
+
+        $artcategories =  Category::select('*')
+         ->join('ArtCats', 'ArtCats.catnr', '=', 'categorieen.catid')
+         ->get();
+
+        $reactions =  Reaction::all();
+        $categories = Category::all();
+
+        return view('blogpages.blogarticles',compact('articles'))
+                        -> with("artcategories", $artcategories)
+                        -> with("categories", $categories)
+                        -> with("reactions", $reactions);
 
     }
 
     //***********************************************************************************
-    public function postReaction($artikelid, $reaction) {
-      DB::table('reacties')->insert(
-        ['artikelid' => $artikelid, 'reactie' => $reaction]
-      );
+    public function getAllArticles() {
+      $articles = Article::orderBy('Datum', 'DESC')->get(); //Article::all();
+      $artcategories =  Category::select('*')
+       ->join('ArtCats', 'ArtCats.catnr', '=', 'categorieen.catid')
+       ->get();
+      $reactions =  Reaction::all();
+      $categories = Category::all();
 
-      return view('blogpages.reactionpostresponse');
+      return view('blogpages.blogarticles',compact('articles'))
+                        -> with("artcategories", $artcategories)
+                        -> with("categories", $categories)
+                        -> with("reactions", $reactions);
+
+    }
+
+    //***********************************************************************************
+    public function storereaction() {
+      $reaction = new Reaction;
+
+      $reaction -> artikelid = request('artnr');
+      $reaction -> reactie = request('reaction');
+
+      $reaction-> save();
+
+
+      return redirect("/edblog");
+
     }
 }
